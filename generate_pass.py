@@ -1,5 +1,8 @@
+from fastapi import FastAPI
 import string
 from random import choice, shuffle
+
+app = FastAPI()
 
 chars1 = [c for c in string.ascii_uppercase if c not in 'OI']
 chars2 = [c for c in string.ascii_lowercase if c not in 'ol']
@@ -11,11 +14,12 @@ def generate_password(length):
     shuffle(res)
     return ''.join(res)
 
-def generate_passwords(count, length):
+@app.get("/generate")
+def generate_passwords(count: int = 1, length: int = 12):
     res = set()
     while len(res) < count:
         res.add(generate_password(length))
-    return list(res)
+    return {"passwords": list(res)}
 
-for i in generate_passwords(int(input()), int(input())):
-    print(i)
+#for i in generate_passwords(int(input()), int(input())):
+#    print(i)
